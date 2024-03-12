@@ -1,30 +1,12 @@
-# React + TypeScript + Vite
+# Apollo Client Optimistic Updation guide
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+So recently, I worked on this large project where we were using Apollo Client with Hasura,
+and our clients needed Optimistic Updation, which, as I came to know, was not an easy
+thing to do.
 
-Currently, two official plugins are available:
+Apollo's docs, while good, we're only helpful for looking at the API and what I could
+and couldn't do. The examples weren't great for a beginner to find out HOW to do 
+it.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+So this guide serves as a dummy's guide to Apollo Optimistic Updation, so that you
+don't have to suffer for 3 days straight (as I did :/)
