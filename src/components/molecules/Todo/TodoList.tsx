@@ -9,9 +9,13 @@ import { RInsertTodo } from '../../../types/mutationResults';
 export const TodoList = () => {
 
     const query = gql(QGetTodos);
-    const [insertTodo, { loading: insertTodoLoading }] = useMutation<RInsertTodo, { name: string }>(gql(MInsertTodo), {
+    // The first parameter in the <> is the type of
+    // return data from the mutation, the second
+    // is the type of the variables for the mutation
+    const [insertTodo] = useMutation<RInsertTodo, { name: string }>(gql(MInsertTodo), {
         update: (cache, { data }) => {
 
+            // Adding type safety to readQuery as well
             const cacheTodos = cache.readQuery<TFetchedTodos>({ query: gql(QGetTodos) });
 
             if (data && cacheTodos) {
@@ -38,8 +42,6 @@ export const TodoList = () => {
     });
 
     const addItemRef = useRef<HTMLInputElement>(null);
-
-
     const { loading, error, data } = useQuery<TFetchedTodos>(query);
 
     return (
@@ -57,6 +59,9 @@ export const TodoList = () => {
                                                 variables: {
                                                     name: addItemRef.current.value,
                                                 },
+                                                // Optimistic response defines
+                                                // exactly what you would expect
+                                                // a mutation to return
                                                 optimisticResponse: {
                                                     insert_Todo_one: {
                                                         id: data ? data.Todo[data.Todo.length - 1].id + 1 : -1,

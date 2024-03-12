@@ -10,6 +10,7 @@ export type RInsertTodo = {
 
 export type RDeleteTodo = {
     delete_Todo_by_pk: {
+        id: number;
         name: string;
     }
 }

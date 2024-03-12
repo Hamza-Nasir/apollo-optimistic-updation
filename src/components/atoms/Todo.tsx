@@ -1,12 +1,44 @@
 import { gql, useMutation } from "@apollo/client"
-import { TTodo } from "../../types/Todo"
-import { MCompleteTodo, MDeleteTodo } from "../../lib/apollo/queries"
+import { TFetchedTodos, TTodo } from "../../types/Todo"
+import { MCompleteTodo, MDeleteTodo, QGetTodos } from "../../lib/apollo/queries"
 import { RCompleteTodo, RDeleteTodo } from "../../types/mutationResults"
 
 export const Todo = ({ todo }: { todo: TTodo }) => {
 
-    const [deleteTodo] = useMutation<RDeleteTodo, { id: number }>(gql(MDeleteTodo))
+    // Add optimistic updation to complete todo!
     const [completeTodo] = useMutation<RCompleteTodo, { id: number }>(gql(MCompleteTodo))
+
+    const [deleteTodo] = useMutation<RDeleteTodo, { id: number }>(gql(MDeleteTodo), {
+        update: (cache, { data }) => {
+            if (data) {
+
+                // This removes the item as from the cache as soon as the query is done
+                cache.evict({
+                    id: cache.identify({
+                        __typename: "Todo",
+                        id: data.delete_Todo_by_pk.id,
+                    }),
+                })
+
+                // After evicting from the cache,
+                // also re-write the query cache
+                const todos = cache.readQuery<TFetchedTodos>({
+                    query: gql(QGetTodos),
+                })
+
+                if (todos) {
+                    const updatedArray = {
+                        Todo: todos.Todo.filter((todo) => todo.id !== data.delete_Todo_by_pk.id)
+                    }
+
+                    cache.writeQuery({
+                        query: gql(QGetTodos),
+                        data: updatedArray,
+                    })
+                }
+            }
+        }
+    })
 
     return (
             <div className="flex mb-4 items-center gap-4">
@@ -33,6 +65,12 @@ export const Todo = ({ todo }: { todo: TTodo }) => {
                         await deleteTodo({
                             variables: {
                                 id: todo.id,
+                            },
+                            optimisticResponse: {
+                                delete_Todo_by_pk: {
+                                    id: todo.id,
+                                    name: todo.name,
+                                }
                             }
                         })
                     }}

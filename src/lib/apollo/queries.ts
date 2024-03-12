@@ -24,6 +24,7 @@ export const MInsertTodo = `
 export const MDeleteTodo = `
     mutation DeleteTodo($id: Int!) {
         delete_Todo_by_pk(id: $id) {
+            id
             name
         }
     }
