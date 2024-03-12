@@ -10,3 +10,9 @@ it.
 
 So this guide serves as a dummy's guide to Apollo Optimistic Updation, so that you
 don't have to suffer for 3 days straight (as I did :/)
+
+## Project Setup
+
+The project is a simple [React app setup with Vite](https://vitejs.dev/guide/).
+It uses Hasura with a Postgres DB for all data querying, and the main star
+of the show, [Apollo Client](https://www.apollographql.com/docs/react/get-started)
